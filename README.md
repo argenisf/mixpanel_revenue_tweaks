@@ -8,8 +8,13 @@ Installation of these tools may require a plugin specific to your browser and op
 
 Simply click the link below to install:
 [€ Euro](https://github.com/drmarshall/mixpanel_revenue_tweaks/euro.js)
+
 £ Great British Pound
+
 ¥ Japanese Yen
+
 AU$ Australian Dollar
+
 SG$ Singapore Dollar
+
 US$ United States Dollar

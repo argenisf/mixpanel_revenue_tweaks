@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name          Mixpanel Revenue Currency Converter (EU)
-// @namespace     http://www.github.com/drmarshall/mixpanel_revenue_tweaks/
+// @namespace     http://www.gingerbeardman.com/ecc/
 // @description   Convert Etsy prices into a custom currency
-// @include       http://www.mixpanel.com/report/*/revenue
+// @include       http://www.mixpanel.com/report/*/revenue/
 // @exclude       http://www.mixpanel.com/account*
 // @exclude       http://www.mixpanel.com/blog*
 // @exclude       http://www.mixpanel.com/pricing*
@@ -34,4 +34,3 @@ txtBody = txtBody.replace(/icon_currency_usd\.gif" alt="usd" height="5" width="1
 anotherBody = txtBody.replace(/(\d*\.\d\d)(?![\w|\.])/g, function (str, p1, offset, s) { return formatCurrency(p1 * myCurrencyRate); });
 
 document.getElementsByTagName('body').item(0).innerHTML = anotherBody;
-

@@ -1,3 +1,13 @@
+// ==UserScript==
+// @name          Mixpanel Revenue Currency Converter (EU)
+// @namespace     http://www.github.com/drmarshall/mixpanel_revenue_tweaks/
+// @description   Convert Etsy prices into a custom currency
+// @include       http://www.mixpanel.com/report/*/revenue
+// @exclude       http://www.mixpanel.com/account*
+// @exclude       http://www.mixpanel.com/blog*
+// @exclude       http://www.mixpanel.com/pricing*
+// ==/UserScript==
+
 var myCurrencySymbol = '&euro;';
 var myCurrencyRate = 0.95;
 

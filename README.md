@@ -7,7 +7,7 @@ Special thanks to @gingerbeardman who inspired this approach (http://www.gingerb
 Installation of these tools may require a plugin specific to your browser and operating system. Chrome provides native support (no plugin required). [Greasemonkey](http://greasemonkey.mozdev.org/) (Firefox), [GreaseKit](http://8-p.info/greasekit/) (Safari on Mac), or others (Internet Explorer on PC). After installing one of the above programs, restart your browser and come back here.
 
 Simply click the link below to install:
-[€ Euro](https://github.com/drmarshall/mixpanel_revenue_tweaks/euro.js)
+[€ Euro](https://github.com/drmarshall/mixpanel_revenue_tweaks/raw/master/euro.user.js)
 
 £ Great British Pound
 

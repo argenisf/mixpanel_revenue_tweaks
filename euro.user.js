@@ -1,11 +1,12 @@
 // ==UserScript==
 // @name          Mixpanel Revenue Currency Converter (EU)
-// @namespace     http://www.gingerbeardman.com/ecc/
-// @description   Convert Etsy prices into a custom currency
-// @include       http://www.mixpanel.com/report/*/revenue/
-// @exclude       http://www.mixpanel.com/account*
-// @exclude       http://www.mixpanel.com/blog*
-// @exclude       http://www.mixpanel.com/pricing*
+// @namespace     http://www.github.com/drmarshall/mixpanel_revenue_tweaks/
+// @description   Convert Mixpanel Revenue report numbers into a custom currency
+// @match         https://mixpanel.com/report/*/revenue/
+// @match         http://mixpanel.com/report/*/revenue/
+// @exclude       http*://www.mixpanel.com/account*
+// @exclude       http*://www.mixpanel.com/blog*
+// @exclude       http*://www.mixpanel.com/pricing*
 // ==/UserScript==
 
 var myCurrencySymbol = '&euro;';
@@ -28,9 +29,8 @@ Array.prototype.removeDuplicates = function() {
 }
 
 txtBody = document.getElementsByTagName('body').item(0).innerHTML;
-txtBody = txtBody.replace(/\$/g, '');
-txtBody = txtBody.replace(/icon_currency_usd\.gif" alt="usd" height="5" width="14"/g, '1x1.gif" height="0" width="0"');
+txtBody = txtBody.replace(/\$/g, myCurrencySymbol);
+txtBody = txtBody.replace("::before", myCurrencySymbol);
 
-anotherBody = txtBody.replace(/(\d*\.\d\d)(?![\w|\.])/g, function (str, p1, offset, s) { return formatCurrency(p1 * myCurrencyRate); });
-
-document.getElementsByTagName('body').item(0).innerHTML = anotherBody;
+//anotherBody = txtBody.replace(/(\d*\.\d\d)(?![\w|\.])/g, function (str, p1, offset, s) { return formatCurrency(p1 * myCurrencyRate); });
+document.getElementsByTagName('body').item(0).innerHTML = txtBody;

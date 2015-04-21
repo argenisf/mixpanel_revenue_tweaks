@@ -1,37 +1,86 @@
 // ==UserScript==
 // @name          Mixpanel Revenue Currency Converter (EU)
 // @namespace     http://www.github.com/drmarshall/mixpanel_revenue_tweaks/
-// @description   Convert Etsy prices into a custom currency
-// @include       http://www.mixpanel.com/report/*/revenue
-// @exclude       http://www.mixpanel.com/account*
-// @exclude       http://www.mixpanel.com/blog*
-// @exclude       http://www.mixpanel.com/pricing*
+// @description   Example
+// @include https://mixpanel.com/report/*/revenue/*
+// @version       0.12
+
+// @require http://code.jquery.com/jquery-latest.js
 // ==/UserScript==
 
-var myCurrencySymbol = '&euro;';
-var myCurrencyRate = 0.95;
+$(document).ready(function() {
 
-function formatCurrency(n) {
-	c = n.toFixed(2);
-	if (n >= 0 && n < 1 && c[0] != '0') c = '0' + c;
-	return myCurrencySymbol + c;
-}
+	var myCurrencySymbol = '€';
+	var myCurrencyRate = 0.95;
+	var matchingPatternStrict = /\$[0-9,]*\.[0-9]*/g;
+	var matchingPatternNoDollar = /[0-9,]*\.[0-9]*/g;
+	var matchingPatternNoDecimal = /\$[0-9,]*/g;
+	var onlyAlterSymbol = false;
+    var table_updating = false;
+    var info_updating = false;
+    var graph_updating = false;
+    var updating = false;
+    
+    var table = $('.data_view .table_inner');
+    var info = $('.info_boxes');
+    var graph = $('.highcharts-yaxis-labels');
 
-Array.prototype.removeDuplicates = function() {
-	var reduced = new Array();
-	this.sort();
-	for (i=0; i<this.length; i++) {
-		if (this[i] == this[i+1]) { continue }
-		reduced[reduced.length] = this[i];
-	}
-	return reduced;
-}
+	function formatCurrent(string){
+		if(!onlyAlterSymbol){
+			string = string.replace('.','*');
+			string = string.replace(',','.');
+			string = string.replace('*',',');
+		}
+		return string.replace('$',myCurrencySymbol);
+	}//function ends
 
-txtBody = document.getElementsByTagName('body').item(0).innerHTML;
-txtBody = txtBody.replace(/\$/g, '');
-txtBody = txtBody.replace(/icon_currency_usd\.gif" alt="usd" height="5" width="14"/g, '1x1.gif" height="0" width="0"');
+	function doChanges(){
+		if(updating) return false;
+		updating = true;
+		var currentText = '';
+		var matches = [];
+		
+		//target info boxes
+		currentText = info.html();
+		var matches = currentText.match(matchingPatternNoDollar);
+		//console.log(currentText);
+		if(matches === null){}else{
+			for(var i = 0; i < matches.length; i++){
+				//console.log(matches[i] + "-" + formatCurrent(matches[i]));
+	            currentText = currentText.replace(matches[i], formatCurrent(matches[i]));
+			}
+			info.html(currentText);
+		}
 
-anotherBody = txtBody.replace(/(\d*\.\d\d)(?![\w|\.])/g, function (str, p1, offset, s) { return formatCurrency(p1 * myCurrencyRate); });
+		//target table
+		currentText = table.html();
+		var matches = currentText.match(matchingPatternStrict);
+		//console.log(currentText);
+		if(matches === null){}else{
+			for(var i = 0; i < matches.length; i++){
+	            currentText = currentText.replace(matches[i], formatCurrent(matches[i]));
+			}
+			table.html(currentText);
+		}
 
-document.getElementsByTagName('body').item(0).innerHTML = anotherBody;
+		//target graph
+		currentText = $('.highcharts-yaxis-labels').html();
+		var matches = currentText.match(matchingPatternNoDecimal);
+		if(matches === null){}else{
+			for(var i = 0; i < matches.length; i++){
+				//console.log(matches[i] + "-" + formatCurrent(matches[i]));
+	            currentText = currentText.replace(matches[i], formatCurrent(matches[i]));
+			}
+			$('.highcharts-yaxis-labels').html(currentText);
+		}
 
+
+		updating = false;
+		console.log('updated');
+		setTimeout(doChanges, 1000);
+	}// function ends
+
+    doChanges();
+
+    $('body').append('<style>#revenue_report .info_boxes .info_box h1:before { content: "'+myCurrencySymbol+'"; }</style>');
+});
